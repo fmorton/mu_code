@@ -7,7 +7,9 @@ bird = Hummingbird('A')         # Declare Hummingbird object
 bird.setLED(1,100)              # Turn on LED 1
 sleep(1)                        # Wait 1 second
 
-bird.stopAll()                  # Turn everything off
+bird.setLED(1,0)              # Turn on LED 1
+
+#bird.stopAll()                  # Turn everything off
 
 # Exercise 2
 bird.setLED(1,100)              # Turn on LED 1
