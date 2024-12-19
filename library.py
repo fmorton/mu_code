@@ -1,3 +1,5 @@
+import sys
+
 from BirdBrain import Hummingbird
 from time import sleep
 
