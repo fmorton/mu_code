@@ -6,7 +6,7 @@ def set_random_tri_color(bird, port):
     green = random.randint(25, 80)
     blue = random.randint(25, 80)
 
-    bird.setTriLED(port, red, green, blue)
+    bird.tri_led(port, red, green, blue)
 
 
 def set_disco_ball(bird, angle):
@@ -17,7 +17,7 @@ def set_disco_ball(bird, angle):
 
 async def wheel(bird):
     while True:
-        bird.setRotationServo(1, random.choice([10, -25, -30, -35, 0]))
+        bird.setRotationServo(1, random.choice([10, -11]))
         await asyncio.sleep(random.uniform(0, 5))
 
 
@@ -35,8 +35,8 @@ async def disco_ball(bird):
 
         else:
             bird.setLED(1, 5)
-            bird.setTriLED(1, 0, 0, 0)
-            bird.setTriLED(2, 0, 0, 0)
+            bird.tri_led(1, 0, 0, 0)
+            bird.tri_led(2, 0, 0, 0)
             bird.setPositionServo(2, 45)
 
         await asyncio.sleep(0)

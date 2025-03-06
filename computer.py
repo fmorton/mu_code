@@ -1,4 +1,3 @@
-#from BirdBrain import Hummingbird
 from time import sleep
 import random
 
