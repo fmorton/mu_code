@@ -4,6 +4,7 @@ import datetime
 import random
 
 from BirdBrain import Hummingbird
+from birdbrain_hummingbird import BirdbrainHummingbird
 from time import sleep
 
 

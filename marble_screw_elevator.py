@@ -5,7 +5,8 @@ bird = Hummingbird('A')
 bird.stopAll()
 sleep(3)
 
-bird.setRotationServo(1, 100)
+bird.setRotationServo(1, 90)
+bird.setRotationServo(2, -100)
 sleep(90)
 
 #bird.setRotationServo(1, -50)
