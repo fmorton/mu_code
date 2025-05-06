@@ -7,7 +7,7 @@ async def bitmap(bird):
         a = [random.randint(0, 1) for i in range(25)]
         bird.display(a)
 
-        #bird.play_note(random.randint(32, 120), 0.025)
+        bird.play_note(random.randint(32, 120), 0.025)
         sleep(random.uniform(0, 0.1))
 
         await asyncio.sleep(random.uniform(0, 0.01))
@@ -30,13 +30,16 @@ def scanner_leds(bird, n):
 async def scanner(bird):
     while True:
         for i in range(1, 5):
+            scanner_delay = 0.01 if (bird.getLight(1) > 65) else 0.5
             scanner_leds(bird, i)
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(scanner_delay)
 
 
 async def spinner(bird):
     while True:
-        await asyncio.sleep(random.uniform(0, 0.01))
+        bird.setPositionServo(1, random.uniform(0, 180))
+        #bird.setPositionServo(1, 90)
+        await asyncio.sleep(random.uniform(0, 0.25))
 
 
 async def extra_rgb(bird):
