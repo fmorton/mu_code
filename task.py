@@ -1,73 +1,57 @@
 import sys
 import asyncio
-import datetime
-import random
 
 from time import sleep
 
-async def task_1():
-    for i in range(60):
-        print("task_1 running")
 
-        await asyncio.sleep(0.5)
-
-async def task_2():
-    for i in range(60):
-        print("task_2 running")
-
-        await asyncio.sleep(0.5)
-
-async def task_3():
-    for i in range(60):
-        print("task_3 running")
-
-        await asyncio.sleep(0.5)
-
-
-class BirdbrainTask:
+class BirdbrainTasks:
     def __init__(self):
-        self.tasks = []
+        self.method_list = []
+        self.task_list = []
 
-    def create_task(self, task):
-        self.tasks.append(asyncio.create_task(task))
+    def create_task(self, method):
+        self.method_list.append(method)
 
-    async def runner(bird):
+    def run(self):
+        asyncio.run(self.runner())
+
+    async def runner(self):
+        for method in self.method_list:
+            self.task_list.append(asyncio.create_task(method))
+
         while True:
-        await asyncio.sleep(0.5)
+            running_task_count = 0
 
-   def run(self):
-        asyncio.run(runner(bird))
+            for task in self.task_list:
+                if not task.done(): running_task_count += 1
 
+            if running_task_count == 0: break
 
-tasks = BirdbrainTask()
-
-tasks.create_task(task_1())
-tasks.create_task(task_2())
-tasks.create_task(task_3())
-
-'''
-async def runner(bird):
-    tasks = []
-
-    tasks.append(asyncio.create_task(bitmap(bird)))
-    tasks.append(asyncio.create_task(scanner(bird)))
-    tasks.append(asyncio.create_task(spinner(bird)))
-    tasks.append(asyncio.create_task(extra_rgb(bird)))
-
-    all_done = False
-
-    while True:
-        running_count = 0
-
-        for task in tasks:
-            if not task.done(): running_count += 1
-
-        if running_count == 0: break
-
-        await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
 
 
-asyncio.run(runner(bird))
+async def method_1(p):
+    for i in range(10):
+        print("method_1 running", p, i)
 
-bird.stopAll()
-'''
+        await asyncio.sleep(0.1)
+
+async def method_2(p):
+    for i in range(20):
+        print("method_2 running", p, i)
+
+        await asyncio.sleep(0.1)
+
+async def method_3():
+    for i in range(30):
+        print("method_3 running", i)
+
+        await asyncio.sleep(0.1)
+
+tasks = BirdbrainTasks()
+
+tasks.create_task(method_1(999))
+tasks.create_task(method_2("parameter value"))
+tasks.create_task(method_3())
+
+tasks.run()
