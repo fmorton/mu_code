@@ -11,6 +11,8 @@ class BirdbrainTasks:
         self.task_list = []
         self.results = {}
 
+    def result(self, result_key):
+        return self.results[result_key]
 
     def create_task(self, method):
         self.method_list.append(method)
@@ -26,12 +28,13 @@ class BirdbrainTasks:
             running_task_count = 0
 
             for task in self.task_list:
-                try:
-                    self.results[task.get_coro().__name__] = task.result()
-                except asyncio.exceptions.InvalidStateError:
-                    pass
+                if task.done():
+                    result_key = task.get_coro().__name__
 
-                if not task.done(): running_task_count += 1
+                    if result_key not in self.results:
+                        self.results[task.get_coro().__name__] = task.result()
+                else:
+                    running_task_count += 1
 
             if running_task_count == 0: break
 
@@ -70,5 +73,7 @@ tasks.create_task(method_3())
 
 tasks.run()
 
-print("final results", tasks.results)
+print("result 1", tasks.result("method_1"))
+print("result 2", tasks.result("method_2"))
+print("result 3", tasks.result("method_3"))
 
