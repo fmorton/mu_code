@@ -5,6 +5,7 @@ import random
 
 from BirdBrain import Hummingbird
 from birdbrain_hummingbird import BirdbrainHummingbird
+from birdbrain_tasks import BirdbrainTasks
 from time import sleep
 
 
