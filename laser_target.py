@@ -8,8 +8,8 @@ TARGET_DOWN = 120
 
 MOVE_SERVO = 2
 MOVE_HOME = 165
-MOVE_LEFT_POSITION = 178
-MOVE_RIGHT_POSITION = 130
+MOVE_LEFT = 178
+MOVE_RIGHT = 130
 
 HOME_NOT_HIT = 45
 HOME_HIT = 140
@@ -30,7 +30,7 @@ while True:
         move_count += 1
         if move_count > move_target:
             move_count = 0
-            move_target = random.randint(MOVE_RIGHT_POSITION, MOVE_LEFT_POSITION)
+            move_target = random.randint(MOVE_RIGHT, MOVE_LEFT)
 
             bird.position_servo(MOVE_SERVO, move_target)
     else:
