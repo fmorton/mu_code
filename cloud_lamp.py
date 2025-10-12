@@ -3,15 +3,27 @@ import random
 
 from birdbrain_hummingbird import BirdbrainHummingbird
 
+def off(bird):
+    bird.tri_led(1, 0, 0, 0)
+    bird.tri_led(2, 0, 0, 0)
+
+def on(bird, port, brightness):
+    bird.tri_led(port, brightness, brightness, brightness)
+
 bird = BirdbrainHummingbird('A')
 
-bird.led(2, 100)
+off(bird)
+
+brightness_list = [ 0, 0, 0, 0, 0, 20, 40, 60, 80, 100 ]
 
 while True:
-    bird.led(random.randint(1, 2), 100)
-    sleep(random.uniform(0.1, 2.0))
-    bird.led(1, 0)
-    bird.led(2, 0)
-    sleep(0.1)
+    on(bird, 1, random.choice(brightness_list))
+    on(bird, 2, random.choice(brightness_list))
+
+    sleep(random.uniform(0.1, 0.3333))
+
+    off(bird)
+
+    sleep(random.uniform(0.1, 0.5))
 
 

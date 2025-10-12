@@ -11,6 +11,6 @@ for i in range(200):
     bird.display(a)
 
     bird.play_note(random.randint(32, 120), 0.025)
-    sleep(random.uniform(0, 0.1))
+    sleep(random.uniform(0.0, 0.1))
 
 bird.stopAll()
