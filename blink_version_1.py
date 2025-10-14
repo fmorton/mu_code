@@ -1,8 +1,7 @@
-from library import *
+from BirdBrain import Hummingbird
+from time import sleep
 
 bird = Hummingbird("A")
-
-Library.reset(bird)
 
 bird.setLED(1, 100)
 sleep(1)
