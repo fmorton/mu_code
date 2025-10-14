@@ -25,5 +25,3 @@ while True:
     off(bird)
 
     sleep(random.uniform(0.1, 0.5))
-
-
