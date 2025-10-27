@@ -1,5 +1,10 @@
 from library import *
 
+import random
+
+while True:
+    print(random.randint(1,2))
+
 bird = Hummingbird("A")
 
 bird.stopAll()
