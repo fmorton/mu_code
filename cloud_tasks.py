@@ -1,5 +1,5 @@
-from birdbrain_hummingbird import BirdbrainHummingbird
-from birdbrain_tasks import BirdbrainTasks
+from birdbrain_python_library_2.birdbrain_hummingbird import BirdbrainHummingbird
+from birdbrain_python_library_2.birdbrain_tasks import BirdbrainTasks
 
 import random
 
@@ -17,7 +17,7 @@ async def flash(bird, port, brightness_list):
 
 bird = BirdbrainHummingbird('A')
 
-brightness_list = [ 0, 0, 0, 0, 0, 20, 40, 60, 80, 100 ]
+brightness_list = [ 0, 0, 0, 0, 0, 50, 70, 80, 90, 100 ]
 
 tasks = BirdbrainTasks()
 

@@ -1,8 +1,7 @@
 from time import sleep
 import random
-
 from BirdBrain import Hummingbird
-from birdbrain_hummingbird import BirdbrainHummingbird
+from birdbrain_hummingbird import BirdbrainHumngbird
 
 bird = BirdbrainHummingbird("A")
 
