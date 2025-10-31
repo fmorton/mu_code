@@ -1,5 +1,5 @@
 from birdbrain import Hummingbird
-from tasks import Tasks
+from birdbrain import Tasks
 
 
 async def task_1(bird):
