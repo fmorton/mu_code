@@ -1,6 +1,7 @@
-from BirdBrain import Hummingbird
-from time import sleep
 import time
+
+from birdbrain import Hummingbird
+from time import sleep
 
 MULTIPLIER = 1.0
 
@@ -13,24 +14,29 @@ for i in range(10):
     sleep(0.5)
 
 print("DEBUG: balanced is", balanced)
+
+
 def forward(bird, orientation):
-    #print("forward", orientation)
+    # print("forward", orientation)
     bird.rotation_servo(1, -11 * MULTIPLIER)
     bird.rotation_servo(2, 25 * MULTIPLIER)
-    #sleep(0.1)
-    #stop(bird)
+    # sleep(0.1)
+    # stop(bird)
+
 
 def backward(bird, orientation):
-    #print("backward", orientation)
+    # print("backward", orientation)
     bird.rotation_servo(1, 10 * MULTIPLIER)
     bird.rotation_servo(2, -11 * MULTIPLIER)
-    #sleep(0.1)
-    #stop(bird)
+    # sleep(0.1)
+    # stop(bird)
+
 
 def stop(bird):
-    #print("stop")
+    # print("stop")
     bird.rotation_servo(1, 0)
     bird.rotation_servo(2, 0)
+
 
 orientation = balanced
 

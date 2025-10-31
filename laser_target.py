@@ -1,6 +1,7 @@
-from BirdBrain import Hummingbird
-from time import sleep
 import random
+
+from birdbrain import Hummingbird
+from time import sleep
 
 TARGET_SERVO = 1
 TARGET_HOME = 36
@@ -26,7 +27,7 @@ while True:
     bird.position_servo(TARGET_SERVO, TARGET_HOME)
     move_target = random.randint(20, 40)
 
-    if(bird.light(1) < 92):
+    if bird.light(1) < 92:
         move_count += 1
         if move_count > move_target:
             move_count = 0

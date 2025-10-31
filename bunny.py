@@ -1,26 +1,31 @@
 import random
-import time
 
-from birdbrain_python_library_2.birdbrain_hummingbird import BirdbrainHummingbird
+from birdbrain import Hummingbird
+from time import sleep
 
 LIGHT_CUTOFF_LEVEL = 7
+
 
 def random_event():
     return random.random() < 0.05
 
+
 def r(maximum):
     return random.randint(0, maximum)
+
 
 def light_sensor_not_covered():
     bird.position_servo(1, 90)
     bird.position_servo(2, 90)
 
-    if random_event(): bird.position_servo(1, 100)
+    if random_event():
+        bird.position_servo(1, 100)
 
     bird.led(1, 2)
     bird.led(2, 4)
 
     bird.tri_led(1, r(3), r(3), r(7))
+
 
 def light_sensor_covered():
     bird.position_servo(1, 120)
@@ -31,16 +36,17 @@ def light_sensor_covered():
 
     bird.tri_led(1, r(100), r(100), r(100))
 
-    time.sleep(0.10)
+    sleep(0.10)
 
     bird.position_servo(1, 90)
     bird.position_servo(2, 90)
 
     bird.tri_led(1, r(100), r(100), r(100))
 
-    time.sleep(0.10)
+    sleep(0.10)
 
-bird = BirdbrainHummingbird('A')
+
+bird = Hummingbird("A")
 
 while True:
     if bird.light(1) < LIGHT_CUTOFF_LEVEL:

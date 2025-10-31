@@ -1,15 +1,15 @@
 from library import *
 
-bird = Hummingbird('A')
+bird = Hummingbird("A")
 
-bird.stopAll()
+bird.stop_all()
 sleep(3)
 
-bird.setRotationServo(1, 90)
-bird.setRotationServo(2, -100)
+bird.rotation_servo(1, 90)
+bird.rotation_servo(2, -100)
 sleep(90)
 
-#bird.setRotationServo(1, -50)
-#sleep(5)
+# bird.rotation_servo(1, -50)
+# sleep(5)
 
-bird.stopAll()
+bird.stop_all()

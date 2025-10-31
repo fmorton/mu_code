@@ -1,9 +1,9 @@
-from BirdBrain import Hummingbird
+from birdbrain import Hummingbird
 from time import sleep
 
 bird = Hummingbird("A")
 
-bird.setLED(1, 100)
+bird.led(1, 100)
 sleep(1)
 
-bird.stopAll()
+bird.stop_all()

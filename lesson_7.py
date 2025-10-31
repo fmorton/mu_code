@@ -1,15 +1,15 @@
 from time import sleep
 import random
 
-from birdbrain_hummingbird import BirdbrainHummingbird
+from birdbrain import Hummingbird
 
-bird = BirdbrainHummingbird("A")
+bird = Hummingbird("A")
 
 while True:
-    light_level = bird.getLight(1) + 35
-    print("Hello",light_level)
+    light_level = bird.light(1) + 35
+    print("Hello", light_level)
 
-    #bird.play_note(light_level, 0.1)
+    # bird.play_note(light_level, 0.1)
     a = [0 for i in range(25)]
-    #a = [random.randint(0, 1) for i in range(25)]
+    # a = [random.randint(0, 1) for i in range(25)]
     bird.display(a)

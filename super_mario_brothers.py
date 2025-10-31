@@ -1,10 +1,9 @@
-from time import sleep
 import random
 
-from BirdBrain import Hummingbird
-from birdbrain_hummingbird import BirdbrainHummingbird
+from birdbrain import Hummingbird
+from time import sleep
 
-bird = BirdbrainHummingbird("A")
+bird = Hummingbird("A")
 
 NOTE_B0 = 31
 NOTE_C1 = 33
@@ -96,6 +95,6 @@ NOTE_CS8 = 4435
 NOTE_D8 = 4699
 NOTE_DS8 = 4978
 
-#for note in part1:
+# for note in part1:
 #    #bird.play_note(note, 1)
 #    sleep(0.25)

@@ -4,10 +4,10 @@ import time
 WINDOW_NAME = "opencv_window"
 
 cv.startWindowThread()
-cv.namedWindow(WINDOW_NAME) #, cv.CV_WINDOW_AUTOSIZE)
+cv.namedWindow(WINDOW_NAME)  # , cv.CV_WINDOW_AUTOSIZE)
 
 images = []
-#flags = cv.IMREAD_GRAYSCALE
+# flags = cv.IMREAD_GRAYSCALE
 flags = cv.IMREAD_COLOR
 
 images.append(cv.imread("/Users/fmorton/Desktop/Keep/0.webp", flags))

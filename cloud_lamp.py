@@ -1,20 +1,23 @@
-from time import sleep
 import random
 
-from birdbrain_python_library_2.birdbrain_hummingbird import BirdbrainHummingbird
+from birdbrain import Hummingbird
+from time import sleep
+
 
 def off(bird):
     bird.tri_led(1, 0, 0, 0)
     bird.tri_led(2, 0, 0, 0)
 
+
 def on(bird, port, brightness):
     bird.tri_led(port, brightness, brightness, brightness)
 
-bird = BirdbrainHummingbird('A')
+
+bird = Hummingbird("A")
 
 off(bird)
 
-brightness_list = [ 0, 0, 0, 0, 0, 20, 40, 60, 80, 100 ]
+brightness_list = [0, 0, 0, 0, 0, 20, 40, 60, 80, 100]
 
 while True:
     on(bird, 1, random.choice(brightness_list))

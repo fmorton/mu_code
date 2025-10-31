@@ -3,7 +3,7 @@ import asyncio
 import datetime
 import random
 
-from BirdBrain import Hummingbird
+from birdbrain import Hummingbird
 from time import sleep
 
 bird = Hummingbird('A')

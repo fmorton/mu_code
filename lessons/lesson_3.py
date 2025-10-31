@@ -1,4 +1,4 @@
-from BirdBrain import Hummingbird
+from birdbrain import Hummingbird
 from time import sleep
 import random
 
@@ -20,7 +20,7 @@ for i in range(0):
 for i in range(200):
     a = [random.randint(0, 1) for i in range(25)]
     bird.setDisplay(a)
-    bird.playNote(random.randint(80, 110), 0.025)
+    bird.play_note(random.randint(80, 110), 0.025)
     sleep(0.1)
 
-bird.stopAll()
+bird.stop_all()

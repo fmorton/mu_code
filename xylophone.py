@@ -5,15 +5,15 @@ WHOLE_NOTE_DELAY = 0.5
 
 
 def reset():
-    bird.setPositionServo(2, 120)
-    bird.setPositionServo(1, 75)
+    bird.position_servo(2, 120)
+    bird.position_servo(1, 75)
 
 
 def play_note():
-    bird.setPositionServo(2, 96)
+    bird.position_servo(2, 96)
     sleep(0.12)
 
-    bird.setPositionServo(2, 120)
+    bird.position_servo(2, 120)
 
 
 def note_angle(note):
@@ -56,7 +56,7 @@ def play(note, delay):
     print(offset, note, delay, note_angle(note), rhythym_delay(delay))
 
     if note != "-":
-        bird.setPositionServo(1, note_angle(note))
+        bird.position_servo(1, note_angle(note))
         sleep(TRAVEL_TIME)
 
         play_note()

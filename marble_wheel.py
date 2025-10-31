@@ -10,21 +10,21 @@ def set_random_tri_color(bird, port):
 
 
 def set_disco_ball(bird, angle):
-    bird.setPositionServo(2, angle)
+    bird.position_servo(2, angle)
     set_random_tri_color(bird, 1)
     set_random_tri_color(bird, 2)
 
 
 async def wheel(bird):
     while True:
-        bird.setRotationServo(1, random.choice([10, -11]))
+        bird.rotation_servo(1, random.choice([10, -11]))
         await asyncio.sleep(random.uniform(0, 5))
 
 
 async def disco_ball(bird):
     while True:
         if bird.getDistance(1) < 14:
-            bird.setLED(1, 50)
+            bird.led(1, 50)
 
             for i in range(7):
                 set_disco_ball(bird, 10)
@@ -34,10 +34,10 @@ async def disco_ball(bird):
                 await asyncio.sleep(0.25)
 
         else:
-            bird.setLED(1, 5)
+            bird.led(1, 5)
             bird.tri_led(1, 0, 0, 0)
             bird.tri_led(2, 0, 0, 0)
-            bird.setPositionServo(2, 45)
+            bird.position_servo(2, 45)
 
         await asyncio.sleep(0)
 

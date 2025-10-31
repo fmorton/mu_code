@@ -1,9 +1,9 @@
+from birdbrain import Hummingbird
 from time import sleep
 
-from BirdBrain import Hummingbird
 
-def play(bird, note, beats = 1):
-    bird.playNote(note, beats)
+def play(bird, note, beats=1):
+    bird.play_note(note, beats)
     sleep(beats)
 
 

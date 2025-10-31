@@ -3,9 +3,10 @@ import asyncio
 
 from time import sleep
 
-#TODO: add create_subprocess_exec support
+# TODO: add create_subprocess_exec support
 
-class BirdbrainTasks:
+
+class Tasks:
     def __init__(self):
         self.method_list = []
         self.task_list = []
@@ -36,12 +37,13 @@ class BirdbrainTasks:
                 else:
                     running_task_count += 1
 
-            if running_task_count == 0: break
+            if running_task_count == 0:
+                break
 
             await self.yield_task()
 
     @classmethod
-    async def yield_task(self, yield_time = 0.0):
+    async def yield_task(self, yield_time=0.0):
         await asyncio.sleep(yield_time)
 
 
@@ -49,23 +51,26 @@ async def method_1(p):
     for i in range(40):
         print("method_1 running", p, i)
 
-        await BirdbrainTasks.yield_task()
+        await Tasks.yield_task()
 
-    return("method_1_return")
+    return "method_1_return"
+
 
 async def method_2(p):
     for i in range(20):
         print("method_2 running", p, i)
 
-        await BirdbrainTasks.yield_task()
+        await Tasks.yield_task()
+
 
 async def method_3():
     for i in range(30):
         print("method_3 running", i)
 
-        await BirdbrainTasks.yield_task()
+        await Tasks.yield_task()
 
-tasks = BirdbrainTasks()
+
+tasks = Tasks()
 
 tasks.create_task(method_1(999))
 tasks.create_task(method_2("text"))
@@ -76,4 +81,3 @@ tasks.run()
 print("result 1", tasks.result("method_1"))
 print("result 2", tasks.result("method_2"))
 print("result 3", tasks.result("method_3"))
-

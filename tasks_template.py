@@ -1,21 +1,24 @@
-from birdbrain_hummingbird import BirdbrainHummingbird
-from birdbrain_tasks import BirdbrainTasks
+from birdbrain import Hummingbird
+from tasks import Tasks
+
 
 async def task_1(bird):
-   while True:
+    while True:
         print("task_1 running")
 
-        await BirdbrainTasks.yield_task(1.0)
+        await Tasks.yield_task(1.0)
+
 
 async def task_2(bird):
-   while True:
+    while True:
         print("task_2 running")
 
-        await BirdbrainTasks.yield_task(0.5)
+        await Tasks.yield_task(0.5)
 
-bird = BirdbrainHummingbird('A')
 
-tasks = BirdbrainTasks()
+bird = Hummingbird("A")
+
+tasks = Tasks()
 
 tasks.create_task(task_1(bird))
 tasks.create_task(task_2(bird))

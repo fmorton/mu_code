@@ -31,11 +31,11 @@ CONNECTION_SERVER_CLOSED = "Error: Request to device failed"
 NO_CONNECTION = "Error: The device is not connected"
 
 # Calculations after receveing the raw values for Hummingbird
-DISTANCE_FACTOR = 117/100
-SOUND_FACTOR = 200/255
-DIAL_FACTOR = 100/230
-LIGHT_FACTOR = 100/255
-VOLTAGE_FACTOR = 3.3/255
+DISTANCE_FACTOR = 117 / 100
+SOUND_FACTOR = 200 / 255
+DIAL_FACTOR = 100 / 230
+LIGHT_FACTOR = 100 / 255
+VOLTAGE_FACTOR = 3.3 / 255
 
 # Scaling factors for Finch
 BATTERY_FACTOR = 0.0406
@@ -57,25 +57,25 @@ class Microbit:
     # ---------------------------------------------------------------------------------
     # UTILITY FUNCTIONS
     # ---------------------------------------------------------------------------------
-    def __init__(self, device='A'):
+    def __init__(self, device="A"):
         """Called when the class is initialized."""
 
         # Check if the letter of the device is valid, exit otherwise
-        if ('ABC'.find(device) != -1):
+        if "ABC".find(device) != -1:
             self.device_s_no = device
             # Check if the device is connected and if it is a micro:bit
             if not self.isConnectionValid():
-                self.stopAll()
+                self.stop_all()
                 sys.exit()
 
-            if not self.isMicrobit():        # it isn't a micro:bit
+            if not self.isMicrobit():  # it isn't a micro:bit
                 print("Error: Device " + str(self.device_s_no) + " is not a micro:bit")
-                self.stopAll()
+                self.stop_all()
                 sys.exit()
-            self.symbolvalue = [0]*25
+            self.symbolvalue = [0] * 25
         else:
             print("Error: Device must be A, B, or C.")
-            self.stopAll()
+            self.stop_all()
             sys.exit()
 
     def isConnectionValid(self):
@@ -83,16 +83,24 @@ class Microbit:
         not the micro:bit is shaking. Return true if the connection is good
         and false otherwise."""
 
-        http_request = self.base_request_in + "/" + "orientation" + "/" + "Shake" + "/" + str(self.device_s_no)
+        http_request = (
+            self.base_request_in
+            + "/"
+            + "orientation"
+            + "/"
+            + "Shake"
+            + "/"
+            + str(self.device_s_no)
+        )
         try:
             response_request = urllib.request.urlopen(http_request)
         except (ConnectionError, urllib.error.URLError):
             print("DEBUG: caught the connection valid exception")
             print(CONNECTION_SERVER_CLOSED)
             return False
-        response = response_request.read().decode('utf-8')
+        response = response_request.read().decode("utf-8")
 
-        if (response == "Not Connected"):
+        if response == "Not Connected":
             print("Error: Device " + str(self.device_s_no) + " is not connected")
             return False
         return True
@@ -100,19 +108,23 @@ class Microbit:
     def isMicrobit(self):
         """This function determines whether or not the device is a micro:bit."""
 
-        http_request = self.base_request_in + "/isMicrobit/static/" + str(self.device_s_no)
+        http_request = (
+            self.base_request_in + "/isMicrobit/static/" + str(self.device_s_no)
+        )
         response = self._send_httprequest(http_request)
 
         # Old versions of BlueBird Connector don't support this request
-        if (response != ""):
-            return (response == 'true')
+        if response != "":
+            return response == "true"
         else:
             # Try to read sensor 4. The value will be 255 for a micro:bit (there is no sensor 4)
             # And some other value for the Hummingbird
-            http_request = self.base_request_in + "/" + "sensor" + "/4/" + str(self.device_s_no)
+            http_request = (
+                self.base_request_in + "/" + "sensor" + "/4/" + str(self.device_s_no)
+            )
             response = self._send_httprequest(http_request)
 
-            return (response == "255")
+            return response == "255"
 
     def clampParametersToBounds(self, input, inputMin, inputMax):
         """This function checks whether an input parameter is within the
@@ -120,8 +132,13 @@ class Microbit:
         input parameter that is within the required range. Otherwise, it
         just returns the initial value."""
 
-        if ((input < inputMin) or (input > inputMax)):
-            print("Warning: Please choose a parameter between " + str(inputMin) + " and " + str(inputMax))
+        if (input < inputMin) or (input > inputMax):
+            print(
+                "Warning: Please choose a parameter between "
+                + str(inputMin)
+                + " and "
+                + str(inputMax)
+            )
             return max(inputMin, min(input, inputMax))
         else:
             return input
@@ -131,13 +148,13 @@ class Microbit:
 
         new_str = ""
         for letter in value:
-            if (letter == 0):
+            if letter == 0:
                 new_str += "false/"
             else:  # All nonzero values become true
                 new_str += "true/"
 
         # Remove the last character in a string
-        new_str = new_str[:len(new_str)-1]
+        new_str = new_str[: len(new_str) - 1]
         return new_str
 
     @staticmethod
@@ -148,7 +165,13 @@ class Microbit:
         if not isinstance(number, int):
             oldNumber = number
             number = int(round(number))
-            print("Warning: Parameter must be an integer. Using " + str(number) + " instead of " + str(oldNumber) + ".")
+            print(
+                "Warning: Parameter must be an integer. Using "
+                + str(number)
+                + " instead of "
+                + str(oldNumber)
+                + "."
+            )
 
         return number
 
@@ -161,9 +184,9 @@ class Microbit:
 
         # Check if LED_string is valid to be printed on the display
         # Check if the length of the array to form a symbol not equal than 25
-        if (len(LEDlist) != 25):
+        if len(LEDlist) != 25:
             print("Error: setDisplay() requires a list of length 25")
-            return             # if the array is the wrong length, don't want to do anything else
+            return  # if the array is the wrong length, don't want to do anything else
 
         # Check if all the characters entered are valid
         for index in range(0, len(LEDlist)):
@@ -183,15 +206,21 @@ class Microbit:
 
         # Warn the user about any special characters - we can mostly only print English characters and digits
         for letter in message:
-            if not (((letter >= 'a') and (letter <= 'z')) or ((letter >= 'A') and (letter <= 'Z')) or
-                    ((letter >= '0') and (letter <= '9')) or (letter == ' ')):
-                print("Warning: Many special characters cannot be printed on the LED display")
+            if not (
+                ((letter >= "a") and (letter <= "z"))
+                or ((letter >= "A") and (letter <= "Z"))
+                or ((letter >= "0") and (letter <= "9"))
+                or (letter == " ")
+            ):
+                print(
+                    "Warning: Many special characters cannot be printed on the LED display"
+                )
 
         # Need to replace spaces with %20
-        message = message.replace(' ', '%20')
+        message = message.replace(" ", "%20")
 
         # Empty out the internal representation of the display, since it will be blank when the print ends
-        self.symbolvalue = [0]*25
+        self.symbolvalue = [0] * 25
 
         # Send the http request
         response = self.send_httprequest_micro("print", message)
@@ -219,7 +248,7 @@ class Microbit:
         response = self.send_httprequest_micro("symbol", outputString)
         return response
 
-    def playNote(self, note, beats):
+    def play_note(self, note, beats):
         """Make the buzzer play a note for certain number of beats. Note is the midi
         note number and should be specified as an integer from 32 to 135. Beats can be
         any number from 0 to 16. One beat corresponds to one second."""
@@ -233,7 +262,15 @@ class Microbit:
 
         # Send HTTP request
         # response = self.__send_httprequest_out("playnote", note, beats)
-        http_request = self.base_request_out + "/playnote/" + str(note) + "/" + str(beats) + "/" + str(self.device_s_no)
+        http_request = (
+            self.base_request_out
+            + "/playnote/"
+            + str(note)
+            + "/"
+            + str(beats)
+            + "/"
+            + str(self.device_s_no)
+        )
         response = self._send_httprequest(http_request)
         return response
 
@@ -243,7 +280,7 @@ class Microbit:
     def _getXYZvalues(self, sensor, intResult):
         """Return the X, Y, and Z values of the given sensor."""
 
-        dimension = ['X', 'Y', 'Z']
+        dimension = ["X", "Y", "Z"]
         values = []
 
         for i in range(0, 3):
@@ -281,15 +318,15 @@ class Microbit:
 
         button = button.upper()
         # Check if the button A and button B are represented in a valid manner
-        if ((button != 'A') and (button != 'B') and (button != 'LOGO')):
+        if (button != "A") and (button != "B") and (button != "LOGO"):
             print("Error: Button must be A, B, or Logo.")
             sys.exit()
         # Send HTTP request
         response = self.send_httprequest_micro_in("button", button)
         # Convert to boolean form
-        if (response == "true"):
+        if response == "true":
             button_value = True
-        elif (response == "false"):
+        elif response == "false":
             button_value = False
         else:
             print("Error in getButton: " + response)
@@ -330,7 +367,7 @@ class Microbit:
 
         # Send HTTP request
         response = self.send_httprequest_micro_in("Shake", None)
-        if (response == "true"):  # convert to boolean
+        if response == "true":  # convert to boolean
             shake = True
         else:
             shake = False
@@ -342,24 +379,40 @@ class Microbit:
         "Screen up", "Screen down", "Tilt left", "Tilt right", "Logo up",
         "Logo down", and "In between"."""
 
-        orientations = ["Screen%20Up", "Screen%20Down", "Tilt%20Left", "Tilt%20Right", "Logo%20Up", "Logo%20Down"]
-        orientation_result = ["Screen up", "Screen down", "Tilt left", "Tilt right", "Logo up", "Logo down"]
+        orientations = [
+            "Screen%20Up",
+            "Screen%20Down",
+            "Tilt%20Left",
+            "Tilt%20Right",
+            "Logo%20Up",
+            "Logo%20Down",
+        ]
+        orientation_result = [
+            "Screen up",
+            "Screen down",
+            "Tilt left",
+            "Tilt right",
+            "Logo up",
+            "Logo down",
+        ]
 
         # Check for orientation of each device and if true return that state
         for targetOrientation in orientations:
             response = self.send_httprequest_micro_in(targetOrientation, None)
-            if (response == "true"):
+            if response == "true":
                 return orientation_result[orientations.index(targetOrientation)]
 
         # If we are in a state in which none of the above seven states are true
         return "In between"
 
-    def stopAll(self):
+    def stop_all(self):
         """Stop all device outputs (ie. Servos, LEDs, LED Array, Motors, etc.)."""
 
-        time.sleep(0.1)         # Hack to give stopAll() time to act before the end of a program
-        response = self.send_httprequest_stopAll()
-        self.symbolvalue = [0]*25
+        time.sleep(
+            0.1
+        )  # Hack to give stop_all() time to act before the end of a program
+        response = self.send_httprequest_stop_all()
+        self.symbolvalue = [0] * 25
         return response
 
     # -------------------------------------------------------------------------
@@ -373,76 +426,188 @@ class Microbit:
             print(CONNECTION_SERVER_CLOSED)
             sys.exit()
 
-        response = response_request.read().decode('utf-8')
-        if (response == "Not Connected"):
+        response = response_request.read().decode("utf-8")
+        if response == "Not Connected":
             print(NO_CONNECTION)
             sys.exit()
 
-        time.sleep(0.01)        # Hack to prevent http requests from overloading the BlueBird Connector
+        time.sleep(
+            0.01
+        )  # Hack to prevent http requests from overloading the BlueBird Connector
         return response
 
     def send_httprequest_micro(self, peri, value):
         """Utility function to arrange and send the http request for microbit output functions."""
 
         # Print command
-        if (peri == "print"):
-            http_request = self.base_request_out + "/" + peri + "/" + str(value) + "/" + str(self.device_s_no)
-        elif (peri == "symbol"):
-            http_request = self.base_request_out + "/" + peri + "/" + str(self.device_s_no) + "/" + str(value)
+        if peri == "print":
+            http_request = (
+                self.base_request_out
+                + "/"
+                + peri
+                + "/"
+                + str(value)
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "symbol":
+            http_request = (
+                self.base_request_out
+                + "/"
+                + peri
+                + "/"
+                + str(self.device_s_no)
+                + "/"
+                + str(value)
+            )
         try:
             response_request = urllib.request.urlopen(http_request)
-            if (response_request.read() == b'200'):
+            if response_request.read() == b"200":
                 response = 1
             else:
                 response = 0
         except (ConnectionError, urllib.error.URLError):
             print(CONNECTION_SERVER_CLOSED)
             sys.exit()
-        time.sleep(0.01)        # Hack to prevent http requests from overloading the BlueBird Connector
+        time.sleep(
+            0.01
+        )  # Hack to prevent http requests from overloading the BlueBird Connector
         return response
 
     def send_httprequest_micro_in(self, peri, value):
         """Utility function to arrange and send the http request for microbit input functions."""
 
-        if (peri == "Accelerometer"):
-            http_request = self.base_request_in + "/" + peri + "/" + str(value) + "/" + str(self.device_s_no)
-        elif (peri == "Compass"):
-            http_request = self.base_request_in + "/" + peri + "/" + str(self.device_s_no)
-        elif (peri == "Magnetometer"):
-            http_request = self.base_request_in + "/" + peri + "/" + str(value) + "/" + str(self.device_s_no)
-        elif (peri == "button"):
-            http_request = self.base_request_in + "/" + peri + "/" + str(value) + "/" + str(self.device_s_no)
-        elif (peri == "Shake"):
-            http_request = self.base_request_in + "/" + "orientation" + "/" + peri + "/" + str(self.device_s_no)
-        elif (peri == "Screen%20Up"):
-            http_request = self.base_request_in + "/" + "orientation" + "/" + peri + "/" + str(self.device_s_no)
-        elif (peri == "Screen%20Down"):
-            http_request = self.base_request_in + "/" + "orientation" + "/" + peri + "/" + str(self.device_s_no)
-        elif (peri == "Tilt%20Right"):
-            http_request = self.base_request_in + "/" + "orientation" + "/" + peri + "/" + str(self.device_s_no)
-        elif (peri == "Tilt%20Left"):
-            http_request = self.base_request_in + "/" + "orientation" + "/" + peri + "/" + str(self.device_s_no)
-        elif (peri == "Logo%20Up"):
-            http_request = self.base_request_in + "/" + "orientation" + "/" + peri + "/" + str(self.device_s_no)
-        elif (peri == "Logo%20Down"):
-            http_request = self.base_request_in + "/" + "orientation" + "/" + peri + "/" + str(self.device_s_no)
+        if peri == "Accelerometer":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + peri
+                + "/"
+                + str(value)
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "Compass":
+            http_request = (
+                self.base_request_in + "/" + peri + "/" + str(self.device_s_no)
+            )
+        elif peri == "Magnetometer":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + peri
+                + "/"
+                + str(value)
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "button":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + peri
+                + "/"
+                + str(value)
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "Shake":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + "orientation"
+                + "/"
+                + peri
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "Screen%20Up":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + "orientation"
+                + "/"
+                + peri
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "Screen%20Down":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + "orientation"
+                + "/"
+                + peri
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "Tilt%20Right":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + "orientation"
+                + "/"
+                + peri
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "Tilt%20Left":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + "orientation"
+                + "/"
+                + peri
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "Logo%20Up":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + "orientation"
+                + "/"
+                + peri
+                + "/"
+                + str(self.device_s_no)
+            )
+        elif peri == "Logo%20Down":
+            http_request = (
+                self.base_request_in
+                + "/"
+                + "orientation"
+                + "/"
+                + peri
+                + "/"
+                + str(self.device_s_no)
+            )
         else:
-            http_request = self.base_request_in + "/" + peri + "/" + str(value) + "/" + str(self.device_s_no)
+            http_request = (
+                self.base_request_in
+                + "/"
+                + peri
+                + "/"
+                + str(value)
+                + "/"
+                + str(self.device_s_no)
+            )
 
-        print("DEBUG: http_request",http_request)
+        print("DEBUG: http_request", http_request)
         try:
             response_request = urllib.request.urlopen(http_request)
         except (ConnectionError, urllib.error.URLError):
             print(CONNECTION_SERVER_CLOSED)
             sys.exit()
-        response = response_request.read().decode('utf-8')
-        if (response == "Not Connected"):
+        response = response_request.read().decode("utf-8")
+        if response == "Not Connected":
             print(NO_CONNECTION)
             sys.exit()
-        time.sleep(0.01)        # Hack to prevent http requests from overloading the BlueBird Connector
+        time.sleep(
+            0.01
+        )  # Hack to prevent http requests from overloading the BlueBird Connector
         return response
 
-    def send_httprequest_stopAll(self):
+    def send_httprequest_stop_all(self):
         """Send HTTP request for hummingbird bit output."""
 
         # Combine diffrenet strings to form a HTTP request
@@ -452,11 +617,13 @@ class Microbit:
         except (ConnectionError, urllib.error.URLError):
             print(CONNECTION_SERVER_CLOSED)
             sys.exit()
-        if (response_request.read() == b'200'):
+        if response_request.read() == b"200":
             response = 1
         else:
             response = 0
-        time.sleep(0.01)        # Hack to prevent http requests from overloading the BlueBird Connector
+        time.sleep(
+            0.01
+        )  # Hack to prevent http requests from overloading the BlueBird Connector
         return response
 
     # Microbit Aliases
@@ -469,10 +636,10 @@ class Microbit:
     is_shaking = isShaking
     magnetometer = getMagnetometer
     orientation = getOrientation
-    play_note = playNote
+    play_note = play_note
     point = setPoint
     sound = getSound
-    stop_all = stopAll
+    stop_all = stop_all
     temperature = getTemperature
 
     # END class Microbit
@@ -480,60 +647,66 @@ class Microbit:
 
 class Hummingbird(Microbit):
     """Hummingbird Bit Class includes the control of the outputs and inputs
-        present on the Hummingbird Bit."""
+    present on the Hummingbird Bit."""
 
     # -------------------------------------------------------------------------
     # UTILITY FUNCTIONS
     # -------------------------------------------------------------------------
-    def __init__(self, device='A'):
+    def __init__(self, device="A"):
         """Class initializer. Specify device letter A, B or C."""
 
         # Check if the length of the array to form a symbol is greater than 25"""
-        if ('ABC'.find(device) != -1):
+        if "ABC".find(device) != -1:
             self.device_s_no = device
             # Check if device is connected and is a hummingbird
             if not self.isConnectionValid():
-                self.stopAll()
+                self.stop_all()
                 sys.exit()
             if not self.isHummingbird():
-                print("Error: Device " + str(self.device_s_no) + " is not a Hummingbird")
-                self.stopAll()
+                print(
+                    "Error: Device " + str(self.device_s_no) + " is not a Hummingbird"
+                )
+                self.stop_all()
                 sys.exit()
-            self.symbolvalue = [0]*25
+            self.symbolvalue = [0] * 25
         else:
-            self.stopAll()
+            self.stop_all()
             sys.exit()
 
     def isHummingbird(self):
         """This function determines whether or not the device is a Hummingbird."""
 
-        http_request = self.base_request_in + "/isHummingbird/static/" + str(self.device_s_no)
+        http_request = (
+            self.base_request_in + "/isHummingbird/static/" + str(self.device_s_no)
+        )
         response = self._send_httprequest(http_request)
 
         # Old versions of BlueBird Connector don't support this request
-        if (response != ""):
-            return (response == 'true')
+        if response != "":
+            return response == "true"
         else:
             # Try to read sensor 4. The value will be 255 for a micro:bit (there is no sensor 4)
             # And some other value for the Hummingbird
-            http_request = self.base_request_in + "/" + "sensor" + "/4/" + str(self.device_s_no)
+            http_request = (
+                self.base_request_in + "/" + "sensor" + "/4/" + str(self.device_s_no)
+            )
             response = self._send_httprequest(http_request)
 
-            return (response != "255")
+            return response != "255"
 
     def isPortValid(self, port, portMax):
         """This function checks whether a port is within the given bounds.
         It returns a boolean value that is either true or false and prints
         an error if necessary."""
 
-        if ((port < 1) or (port > portMax)):
+        if (port < 1) or (port > portMax):
             print("Error: Please choose a port value between 1 and " + str(portMax))
             return False
         else:
             return True
 
     def calculate_LED(self, intensity):
-        """ Utility function to covert LED from 0-100 to 0-255."""
+        """Utility function to covert LED from 0-100 to 0-255."""
 
         intensity_c = int((intensity * 255) / 100)
 
@@ -560,7 +733,7 @@ class Hummingbird(Microbit):
 
         # If the vlaues are above the limits fix the instensity to maximum value,
         # if less than the minimum value fix the intensity to minimum value
-        if ((servo_value > -10) and (servo_value < 10)):
+        if (servo_value > -10) and (servo_value < 10):
             servo_value_c = 255
         else:
             servo_value_c = int((servo_value * 23 / 100) + 122)
@@ -569,7 +742,7 @@ class Hummingbird(Microbit):
     # -------------------------------------------------------------------------
     # HUMMINGBIRD BIT OUTPUT
     # -------------------------------------------------------------------------
-    def setLED(self, port, intensity):
+    def led(self, port, intensity):
         """Set LED  of a certain port requested to a valid intensity."""
 
         # Early return if we can't execute the command because the port is invalid
@@ -585,7 +758,7 @@ class Hummingbird(Microbit):
         response = self.send_httprequest("led", port, intensity_c)
         return response
 
-    def setTriLED(self, port, redIntensity, greenIntensity, blueIntensity):
+    def tri_led(self, port, redIntensity, greenIntensity, blueIntensity):
         """Set TriLED  of a certain port requested to a valid intensity."""
 
         # Early return if we can't execute the command because the port is invalid
@@ -598,12 +771,18 @@ class Hummingbird(Microbit):
         blue = self.clampParametersToBounds(blueIntensity, 0, 100)
 
         # Change the range from 0-100 to 0-255
-        (r_intensity_c, g_intensity_c, b_intensity_c) = self.calculate_RGB(red, green, blue)
+        (r_intensity_c, g_intensity_c, b_intensity_c) = self.calculate_RGB(
+            red, green, blue
+        )
         # Send HTTP request
-        response = self.send_httprequest("triled", port, str(r_intensity_c) + "/" + str(g_intensity_c) + "/" + str(b_intensity_c))
+        response = self.send_httprequest(
+            "triled",
+            port,
+            str(r_intensity_c) + "/" + str(g_intensity_c) + "/" + str(b_intensity_c),
+        )
         return response
 
-    def setPositionServo(self, port, angle):
+    def position_servo(self, port, angle):
         """Set Position servo of a certain port requested to a valid angle."""
 
         # Early return if we can't execute the command because the port is invalid
@@ -618,7 +797,7 @@ class Hummingbird(Microbit):
         response = self.send_httprequest("servo", port, angle_c)
         return response
 
-    def setRotationServo(self, port, speed):
+    def rotation_servo(self, port, speed):
         """Set Rotation servo of a certain port requested to a valid speed."""
 
         # Early return if we can't execute the command because the port is invalid
@@ -647,7 +826,7 @@ class Hummingbird(Microbit):
         response = self.send_httprequest_in("sensor", port)
         return response
 
-    def getLight(self, port):
+    def light(self, port):
         """Read the value of the light sensor attached to a certain port."""
 
         response = self.getSensor(port)
@@ -668,7 +847,7 @@ class Hummingbird(Microbit):
         """Read the value of the distance sensor attached to a certain port."""
 
         response = self.getSensor(port)
-        print("DEBUG: distance response before calculation",response)
+        print("DEBUG: distance response before calculation", response)
         distance_value = int(response * DISTANCE_FACTOR)
         return distance_value
 
@@ -677,7 +856,7 @@ class Hummingbird(Microbit):
 
         response = self.getSensor(port)
         dial_value = int(response * DIAL_FACTOR)
-        if (dial_value > 100):
+        if dial_value > 100:
             dial_value = 100
         return dial_value
 
@@ -695,35 +874,57 @@ class Hummingbird(Microbit):
         """Send HTTP requests for Hummingbird bit inputs."""
 
         # Combine different strings to form an HTTP request
-        http_request = self.base_request_in + "/" + peri + "/" + str(port) + "/" + str(self.device_s_no)
-        print("DEBUG: http_request",http_request)
+        http_request = (
+            self.base_request_in
+            + "/"
+            + peri
+            + "/"
+            + str(port)
+            + "/"
+            + str(self.device_s_no)
+        )
+        print("DEBUG: http_request", http_request)
         try:
             response_request = urllib.request.urlopen(http_request)
         except (ConnectionError, urllib.error.URLError):
             print(CONNECTION_SERVER_CLOSED)
             sys.exit()
-        response = response_request.read().decode('utf-8')
-        if (response == "Not Connected"):
+        response = response_request.read().decode("utf-8")
+        if response == "Not Connected":
             print(NO_CONNECTION)
             sys.exit()
-        time.sleep(0.01)        # Hack to prevent http requests from overloading the BlueBird Connector
+        time.sleep(
+            0.01
+        )  # Hack to prevent http requests from overloading the BlueBird Connector
         return int(response)
 
     def send_httprequest(self, peri, port, value):
         """Send HTTP request for Hummingbird bit output"""
 
         # Combine different strings to form an HTTP request
-        http_request = self.base_request_out + "/" + peri + "/" + str(port) + "/" + str(value) + "/" + str(self.device_s_no)
+        http_request = (
+            self.base_request_out
+            + "/"
+            + peri
+            + "/"
+            + str(port)
+            + "/"
+            + str(value)
+            + "/"
+            + str(self.device_s_no)
+        )
         try:
             response_request = urllib.request.urlopen(http_request)
         except (ConnectionError, urllib.error.URLError):
             print(CONNECTION_SERVER_CLOSED)
             sys.exit()
-        if (response_request.read() == b'200'):
+        if response_request.read() == b"200":
             response = 1
         else:
             response = 0
-        time.sleep(0.01)        # Hack to prevent http requests from overloading the BlueBird Connector
+        time.sleep(
+            0.01
+        )  # Hack to prevent http requests from overloading the BlueBird Connector
         return response
 
     # Hummingbird Aliases
@@ -731,15 +932,15 @@ class Hummingbird(Microbit):
     distance = getDistance
     is_hummingbird = isHummingbird
     is_port_valid = isPortValid
-    led = setLED
-    light = getLight
-    position_servo = setPositionServo
-    rotation_servo = setRotationServo
+    led = led
+    light = light
+    position_servo = position_servo
+    rotation_servo = rotation_servo
     sensor = getSensor
     sound = getSound
-    # stop_all = stopAll
+    # stop_all = stop_all
     # temperature = getTemperature
-    tri_led = setTriLED
+    tri_led = tri_led
     voltage = getVoltage
 
     # END class Hummingbird
@@ -750,19 +951,21 @@ class Finch(Microbit):
     in the Finch robot. When creating an instance, specify which robot by the
     device letter used in the BlueBirdConnector device list (A, B, or C)."""
 
-    def __init__(self, device='A'):
-        """Class initializer. """
+    def __init__(self, device="A"):
+        """Class initializer."""
 
-        if ('ABC'.find(device) != -1):  # check for valid device letter
+        if "ABC".find(device) != -1:  # check for valid device letter
             self.device_s_no = device
 
             if not self.isConnectionValid():
                 self.__exit("Error: Invalid Connection")
 
             if not self.__isFinch():
-                self.__exit("Error: Device " + str(self.device_s_no) + " is not a Finch")
+                self.__exit(
+                    "Error: Device " + str(self.device_s_no) + " is not a Finch"
+                )
 
-            self.symbolvalue = [0]*25
+            self.symbolvalue = [0] * 25
 
         else:
             self.__exit("Error: Device must be A, B, or C.")
@@ -772,7 +975,7 @@ class Finch(Microbit):
         """Print error, shutdown robot, and exit python"""
 
         print(msg)
-        self.stopAll()
+        self.stop_all()
         sys.exit()
 
     def __isFinch(self):
@@ -781,7 +984,7 @@ class Finch(Microbit):
         http_request = self.base_request_in + "/isFinch/static/" + str(self.device_s_no)
         response = self._send_httprequest(http_request)
 
-        return (response == 'true')
+        return response == "true"
 
     @staticmethod
     def __calculate_RGB(r_intensity, g_intensity, b_intensity):
@@ -797,9 +1000,19 @@ class Finch(Microbit):
     def __formatRightLeft(direction):
         """Utility function to format a selection of right or left for a backend request."""
 
-        if direction == "R" or direction == "r" or direction == "Right" or direction == "right":
+        if (
+            direction == "R"
+            or direction == "r"
+            or direction == "Right"
+            or direction == "right"
+        ):
             return "Right"
-        elif direction == "L" or direction == "l" or direction == "Left" or direction == "left":
+        elif (
+            direction == "L"
+            or direction == "l"
+            or direction == "Left"
+            or direction == "left"
+        ):
             return "Left"
         else:
             print("Error: Please specify either 'R' or 'L' direction.")
@@ -809,9 +1022,19 @@ class Finch(Microbit):
     def __formatForwardBackward(direction):
         """Utility function to format a selection of forward or backward for a backend request."""
 
-        if direction == "F" or direction == "f" or direction == "Forward" or direction == "forward":
+        if (
+            direction == "F"
+            or direction == "f"
+            or direction == "Forward"
+            or direction == "forward"
+        ):
             return "Forward"
-        elif direction == "B" or direction == "b" or direction == "Backward" or direction == "backward":
+        elif (
+            direction == "B"
+            or direction == "b"
+            or direction == "Backward"
+            or direction == "backward"
+        ):
             return "Backward"
         else:
             print("Error: Please specify either 'F' or 'B' direction.")
@@ -822,8 +1045,16 @@ class Finch(Microbit):
         Combine strings to form a HTTP input request.
         Send the request and return the result as a string."""
 
-        http_request = self.base_request_in + "/" + peri + "/" + str(port) + "/" + str(self.device_s_no)
-        print("DEBUG: http_request ",http_request)
+        http_request = (
+            self.base_request_in
+            + "/"
+            + peri
+            + "/"
+            + str(port)
+            + "/"
+            + str(self.device_s_no)
+        )
+        print("DEBUG: http_request ", http_request)
         response = self._send_httprequest(http_request)
         return response
 
@@ -841,7 +1072,7 @@ class Finch(Microbit):
         http_request = self.base_request_out + requestString + str(self.device_s_no)
         response = self._send_httprequest(http_request)
 
-        if (response == "200"):
+        if response == "200":
             return 1
         else:
             return 0
@@ -860,18 +1091,19 @@ class Finch(Microbit):
         http_request = self.base_request_out + requestString
         response = self._send_httprequest(http_request)
 
-        if (response == "200"):
+        if response == "200":
             return 1
         else:
             return 0
 
     # Finch Output
-    def __setTriLED(self, port, redIntensity, greenIntensity, blueIntensity):
+    def __tri_led(self, port, redIntensity, greenIntensity, blueIntensity):
         """Set TriLED(s) on the Finch.
-        Port 1 is the beak. Ports 2 to 5 are tail. Specify port "all" to set the whole tail."""
+        Port 1 is the beak. Ports 2 to 5 are tail. Specify port "all" to set the whole tail.
+        """
 
         # Early return if we can't execute the command because the port is invalid
-        if ((not port == "all") and ((port < 1) or (port > 5))):
+        if (not port == "all") and ((port < 1) or (port > 5)):
             return 0
 
         # Check the intensity value lies with in the range of RGB LED limits
@@ -890,7 +1122,7 @@ class Finch(Microbit):
     def setBeak(self, redIntensity, greenIntensity, blueIntensity):
         """Set beak to a valid intensity. Each intensity should be an integer from 0 to 100."""
 
-        response = self.__setTriLED(1, redIntensity, greenIntensity, blueIntensity)
+        response = self.__tri_led(1, redIntensity, greenIntensity, blueIntensity)
         return response
 
     def setTail(self, port, redIntensity, greenIntensity, blueIntensity):
@@ -901,7 +1133,7 @@ class Finch(Microbit):
         if not port == "all":
             port = port + 1
 
-        response = self.__setTriLED(port, redIntensity, greenIntensity, blueIntensity)
+        response = self.__tri_led(port, redIntensity, greenIntensity, blueIntensity)
         return response
 
     def __moveFinchAndWait(self, motion, direction, length, speed):
@@ -916,11 +1148,13 @@ class Finch(Microbit):
         # Send HTTP request
         response = self.__send_httprequest_move(motion, direction, length, speed)
 
-        while (not (done) and not (isMoving == "Not Connected")):
+        while not (done) and not (isMoving == "Not Connected"):
             wasMoving = isMoving
             time.sleep(0.01)
             isMoving = self.__send_httprequest_in("finchIsMoving", "static")
-            done = ((time.time() > commandSendTime + 0.5) or (wasMoving == "true")) and (isMoving == "false")
+            done = (
+                (time.time() > commandSendTime + 0.5) or (wasMoving == "true")
+            ) and (isMoving == "false")
 
         return response
 
@@ -987,14 +1221,23 @@ class Finch(Microbit):
         or 'L'. If the port is not valid, returns -1."""
 
         # Early return if we can't execute the command because the port is invalid
-        if ((not sensor == "finchOrientation") and (not port == "Left") and (not port == "Right") and
-                (not ((port == "static") and (sensor == "Distance" or sensor == "finchCompass")))):
+        if (
+            (not sensor == "finchOrientation")
+            and (not port == "Left")
+            and (not port == "Right")
+            and (
+                not (
+                    (port == "static")
+                    and (sensor == "Distance" or sensor == "finchCompass")
+                )
+            )
+        ):
             return -1
 
         response = self.__send_httprequest_in(sensor, port)
         return response
 
-    def getLight(self, direction):
+    def light(self, direction):
         """Read the value of the right or left light sensor ('R' or 'L')."""
 
         direction = self.__formatRightLeft(direction)
@@ -1061,13 +1304,27 @@ class Finch(Microbit):
         "Beak up", "Beak down", "Tilt left", "Tilt right", "Level",
         "Upside down", and "In between"."""
 
-        orientations = ["Beak%20Up", "Beak%20Down", "Tilt%20Left", "Tilt%20Right", "Level", "Upside%20Down"]
-        orientation_result = ["Beak up", "Beak down", "Tilt left", "Tilt right", "Level", "Upside down"]
+        orientations = [
+            "Beak%20Up",
+            "Beak%20Down",
+            "Tilt%20Left",
+            "Tilt%20Right",
+            "Level",
+            "Upside%20Down",
+        ]
+        orientation_result = [
+            "Beak up",
+            "Beak down",
+            "Tilt left",
+            "Tilt right",
+            "Level",
+            "Upside down",
+        ]
 
         # Check for orientation of each device and if true return that state
         for targetOrientation in orientations:
             response = self.__getSensor("finchOrientation", targetOrientation)
-            if (response == "true"):
+            if response == "true":
                 return orientation_result[orientations.index(targetOrientation)]
 
         # If we are in a state in which none of the above seven states are true
@@ -1079,7 +1336,7 @@ class Finch(Microbit):
     compass = getCompass
     distance = getDistance
     encoder = getEncoder
-    light = getLight
+    light = light
     line = getLine
     magnetometer = getMagnetometer
     motors = setMotors
@@ -1091,8 +1348,9 @@ class Finch(Microbit):
 
     # END class Finch
 
+
 print("DEBUG")
 
 hummingbird = Finch("B")
 response = hummingbird.getMagnetometer()
-print("response",response)
+print("response", response)

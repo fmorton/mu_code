@@ -3,11 +3,11 @@ from library import *
 import random
 
 while True:
-    print(random.randint(1,2))
+    print(random.randint(1, 2))
 
 bird = Hummingbird("A")
 
-bird.stopAll()
+bird.stop_all()
 sleep(3)
 
 bird.tri_led(1, 20, 20, 20)
