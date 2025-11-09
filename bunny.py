@@ -6,45 +6,22 @@ from time import sleep
 LIGHT_CUTOFF_LEVEL = 7
 
 
-def random_event():
-    return random.random() < 0.05
-
-
-def r(maximum):
-    return random.randint(0, maximum)
-
 
 def light_sensor_not_covered():
-    bird.position_servo(1, 90)
-    bird.position_servo(2, 90)
-
-    if random_event():
-        bird.position_servo(1, 100)
-
-    bird.led(1, 2)
-    bird.led(2, 4)
-
-    bird.tri_led(1, r(3), r(3), r(7))
+    print("NOT COVERED")
+    bird.position_servo(1, 76)
+    bird.position_servo(2, 75)
 
 
 def light_sensor_covered():
-    bird.position_servo(1, 120)
-    bird.position_servo(2, 60)
+    print("COVERED")
+    bird.position_servo(1, random.randint(55, 95))
+    sleep(random.uniform(0.1, 0.75))
 
-    bird.led(1, 80)
-    bird.led(2, 80)
-
-    bird.tri_led(1, r(100), r(100), r(100))
-
-    sleep(0.10)
-
-    bird.position_servo(1, 90)
-    bird.position_servo(2, 90)
-
-    bird.tri_led(1, r(100), r(100), r(100))
+    bird.position_servo(2, random.randint(55, 95))
+    sleep(random.uniform(0.1, 0.75))
 
     sleep(0.10)
-
 
 bird = Hummingbird("A")
 
