@@ -9,7 +9,7 @@ SERVO_UP_DOWN = 2
 hummingbird = Hummingbird("A")
 
 while True:
-    hummingbird.position_servo(SERVO_SIDE_TO_SIDE, random.randint(60, 110))
-    hummingbird.position_servo(SERVO_UP_DOWN, random.randint(90, 90))
+    hummingbird.position_servo(SERVO_SIDE_TO_SIDE, random.randint(60, 85))
+    hummingbird.position_servo(SERVO_UP_DOWN, random.randint(60, 100))
 
-    sleep(random.uniform(0.2, 0.6))
+    sleep(random.uniform(0.3, 0.8))
