@@ -3,14 +3,14 @@ import time
 
 def on_press(key):
     try:
-        print(f"Key pressed: {key.char}")
+        print(f"Key pressed: {key.char}", "class", key.__class__.__name__)
     except AttributeError:
-        print(f"Special key pressed: {key}")
+        print(f"Special key pressed: {key}", "class", key.__class__.__name__)
 
-listener = keyboard.Listener(on_press=on_press)
+listener = keyboard.Listener(on_press=on_press, suppress=True)
 listener.start()
 
 while True:
-    # Do other work
     print("Program running...")
+
     time.sleep(1)
