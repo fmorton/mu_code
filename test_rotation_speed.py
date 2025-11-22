@@ -1,6 +1,6 @@
 from time import sleep
 
-from birdbrain import Hummingbird
+from robot.hummingbird import Hummingbird
 
 bird = Hummingbird()
 

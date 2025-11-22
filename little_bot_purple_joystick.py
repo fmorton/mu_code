@@ -10,7 +10,7 @@ SIDE_TO_SIDE_CENTER = 75
 UP_DOWN_CENTER = 75
 UP_DOWN_SERVO = 1
 
-from birdbrain import Hummingbird
+from robot.hummingbird import Hummingbird
 
 hummingbird = Hummingbird("A")
 

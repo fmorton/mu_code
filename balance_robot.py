@@ -1,6 +1,6 @@
 import time
 
-from birdbrain import Hummingbird
+from robot.hummingbird import Hummingbird
 from time import sleep
 
 MULTIPLIER = 1.0

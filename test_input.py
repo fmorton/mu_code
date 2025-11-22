@@ -1,6 +1,6 @@
 from pynput import keyboard
 
-from birdbrain import Constant
+from robot.constant import Constant
 from time import sleep
 
 def on_press(key):

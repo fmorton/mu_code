@@ -1,7 +1,7 @@
 import asyncio
 import random
 
-from birdbrain import Hummingbird
+from robot.hummingbird import Hummingbird
 
 
 async def flash(bird, port, brightness_list):

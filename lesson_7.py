@@ -1,7 +1,7 @@
 from time import sleep
 import random
 
-from birdbrain import Hummingbird
+from robot.hummingbird import Hummingbird
 
 bird = Hummingbird("A")
 

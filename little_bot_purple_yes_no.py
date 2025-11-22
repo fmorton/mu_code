@@ -1,6 +1,6 @@
 import random
 
-from birdbrain import Hummingbird
+from robot.hummingbird import Hummingbird
 from time import sleep
 
 SERVO_UP_DOWN = 1

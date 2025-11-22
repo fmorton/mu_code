@@ -1,6 +1,6 @@
 import random
 
-from birdbrain import Hummingbird
+from robot.hummingbird import Hummingbird
 from tasks import Tasks
 
 CACHE_LIGHT_LEVEL = "cache_light_level"
