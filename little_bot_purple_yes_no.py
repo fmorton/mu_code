@@ -16,19 +16,23 @@ while True:
         while hummingbird.light(1) < 10:
             sleep(0.1)
 
-        if random.random() >= 0.5:
+        answer = random.random()
+        print(answer)
+
+        if answer <= 0.4:
             for _ in range(5):
                 hummingbird.position_servo(SERVO_UP_DOWN, 50)
                 sleep(0.2)
                 hummingbird.position_servo(SERVO_UP_DOWN, 70)
                 sleep(0.2)
-
-        else:
+        elif answer <= 0.8:
             for _ in range(5):
                 hummingbird.position_servo(SERVO_SIDE_TO_SIDE, 60)
                 sleep(0.2)
                 hummingbird.position_servo(SERVO_SIDE_TO_SIDE, 80)
                 sleep(0.2)
+        else:
+                sleep(2)
 
     hummingbird.position_servo(SERVO_UP_DOWN, random.randint(60, 100))
     hummingbird.position_servo(SERVO_SIDE_TO_SIDE, random.randint(50, 95))
