@@ -10,16 +10,27 @@ hummingbird = Hummingbird("A")
 
 while True:
     if hummingbird.light(1) < 10:
-        print("LOOK")
         hummingbird.position_servo(SERVO_UP_DOWN, 60)
         hummingbird.position_servo(SERVO_SIDE_TO_SIDE, 70)
 
         while hummingbird.light(1) < 10:
-            sleep(0.25)
-        print("ANSWER")
+            sleep(0.1)
 
-    print("LOOK AROUND")
+        if random.random() >= 0.5:
+            for _ in range(5):
+                hummingbird.position_servo(SERVO_UP_DOWN, 50)
+                sleep(0.2)
+                hummingbird.position_servo(SERVO_UP_DOWN, 70)
+                sleep(0.2)
+
+        else:
+            for _ in range(5):
+                hummingbird.position_servo(SERVO_SIDE_TO_SIDE, 60)
+                sleep(0.2)
+                hummingbird.position_servo(SERVO_SIDE_TO_SIDE, 80)
+                sleep(0.2)
+
     hummingbird.position_servo(SERVO_UP_DOWN, random.randint(60, 100))
     hummingbird.position_servo(SERVO_SIDE_TO_SIDE, random.randint(50, 95))
 
-    sleep(random.uniform(0.4, 0.8))
+    sleep(random.uniform(0.3, 0.9))
